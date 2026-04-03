@@ -1,0 +1,16 @@
+name: Update Golf Scores
+
+on:
+  schedule:
+    # Runs every 10 minutes from 8 AM to 7 PM ET on April 2-5, 2026
+    # Cron runs in UTC, so 8 AM ET = 12 PM UTC, 7 PM ET = 11 PM UTC
+    - cron: "*/10 12-23 2-5 4 *"
+  workflow_dispatch:
+
+jobs:
+  update-scores:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Netlify Function
+        run: |
+          curl -X GET "https://momajors.netlify.app/.netlify/functions/update-scores"
