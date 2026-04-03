@@ -128,8 +128,11 @@ async function main() {
   await signInWithEmailAndPassword(auth, ADMIN_EMAIL, ADMIN_PASSWORD);
   console.log("Signed in. Starting score updates every 10 minutes...\n");
 
-  // Run immediately, then every 10 min
+  // Run once (GitHub Actions) or loop every 10 min (local)
   await fetchAndUpdate(db);
+  if (process.env.RUN_ONCE) {
+    process.exit(0);
+  }
   setInterval(() => fetchAndUpdate(db), POLL_INTERVAL_MS);
 }
 

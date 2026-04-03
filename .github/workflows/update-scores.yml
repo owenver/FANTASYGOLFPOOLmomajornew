@@ -2,15 +2,30 @@ name: Update Golf Scores
 
 on:
   schedule:
-    # Runs every 10 minutes from 8 AM to 7 PM ET on April 2-5, 2026
-    # Cron runs in UTC, so 8 AM ET = 12 PM UTC, 7 PM ET = 11 PM UTC
-    - cron: "*/10 12-23 2-5 4 *"
-  workflow_dispatch:
+    # Every 10 min during golf hours (noon–midnight UTC = 8am–8pm ET)
+    # Covers Valero remaining (Apr 4-5) and Masters (Apr 9-12)
+    - cron: "*/10 12-23 4-5 4 *"   # Valero Sat-Sun
+    - cron: "*/10 12-23 9-12 4 *"  # Masters Thu-Sun
+  workflow_dispatch: # Allow manual trigger from GitHub
 
 jobs:
   update-scores:
     runs-on: ubuntu-latest
     steps:
-      - name: Call Netlify Function
-        run: |
-          curl -X GET "https://momajors.netlify.app/.netlify/functions/update-scores"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run score updater
+        env:
+          FIREBASE_PASS: ${{ secrets.FIREBASE_PASS }}
+          RUN_ONCE: "true"
+        run: node score-updater.mjs
