@@ -69,7 +69,7 @@ function transformLeaderboard(rows) {
     }
 
     // If current round is in progress, store currentRoundScore in the right slot
-    if (!row.roundComplete && row.currentRoundScore) {
+    if (!row.roundComplete && row.currentRoundScore && row.currentRoundScore !== "-") {
       const currentRound = row.currentRound?.$numberInt ?? row.currentRound;
       const key = `r${currentRound}`;
       if (["r1","r2","r3","r4"].includes(key)) r[key] = parseScore(row.currentRoundScore);
