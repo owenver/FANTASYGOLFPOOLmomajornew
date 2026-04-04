@@ -44,7 +44,8 @@ function findAppName(apiFirstName, apiLastName) {
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function parseScore(str) {
   if (!str || str === "E") return 0;
-  return parseInt(str, 10);
+  const n = parseInt(str, 10);
+  return isNaN(n) ? 0 : n;
 }
 
 // Firebase keys can't contain . # $ / [ ]
@@ -59,19 +60,19 @@ function transformLeaderboard(rows) {
     const appName = findAppName(row.firstName, row.lastName);
     if (!appName) continue; // not in our player pool, skip
 
-    const r = { r1: 0, r2: 0, r3: 0, r4: 0, thru: "-", cut: false };
+    const r = { thru: "-", cut: false };
 
     for (const round of row.rounds || []) {
       const roundNum = round.roundId?.$numberInt ?? round.roundId;
       const key = `r${roundNum}`;
-      if (key in r) r[key] = parseScore(round.scoreToPar);
+      if (["r1","r2","r3","r4"].includes(key)) r[key] = parseScore(round.scoreToPar);
     }
 
     // If current round is in progress, store currentRoundScore in the right slot
     if (!row.roundComplete && row.currentRoundScore) {
       const currentRound = row.currentRound?.$numberInt ?? row.currentRound;
       const key = `r${currentRound}`;
-      if (key in r) r[key] = parseScore(row.currentRoundScore);
+      if (["r1","r2","r3","r4"].includes(key)) r[key] = parseScore(row.currentRoundScore);
     }
 
     r.thru = row.thru || "-";
@@ -87,37 +88,47 @@ function transformLeaderboard(rows) {
 async function fetchAndUpdate(db) {
   const url = `https://live-golf-data.p.rapidapi.com/leaderboard?orgId=${TOURNAMENT.orgId}&year=${TOURNAMENT.year}&tournId=${TOURNAMENT.tournId}`;
 
-  const res = await fetch(url, {
-    headers: {
-      "x-rapidapi-host": "live-golf-data.p.rapidapi.com",
-      "x-rapidapi-key": RAPIDAPI_KEY,
-    },
-  });
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "x-rapidapi-host": "live-golf-data.p.rapidapi.com",
+        "x-rapidapi-key": RAPIDAPI_KEY,
+      },
+      signal: AbortSignal.timeout(15000), // 15 second timeout
+    });
 
-  if (!res.ok) {
-    console.error(`API error: ${res.status} ${res.statusText}`);
-    return;
+    if (!res.ok) {
+      console.error(`API error: ${res.status} ${res.statusText}`);
+      return;
+    }
+
+    const data = await res.json();
+    const scores = transformLeaderboard(data.leaderboardRows || []);
+    const playerCount = Object.keys(scores).length;
+
+    await set(ref(db, "liveScores/current"), {
+      scores,
+      playerCount,
+      lastUpdated: new Date().toISOString(),
+      tournamentStatus: data.status || "unknown",
+      round: data.roundId?.$numberInt ?? data.roundId,
+    });
+
+    console.log(`[${new Date().toLocaleTimeString()}] Updated ${playerCount} players | Tournament: ${data.status} | Round: ${data.roundId?.$numberInt ?? data.roundId}`);
+  } catch (err) {
+    console.error(`[${new Date().toLocaleTimeString()}] Fetch error (will retry next interval):`, err.message);
   }
-
-  const data = await res.json();
-  const scores = transformLeaderboard(data.leaderboardRows || []);
-  const playerCount = Object.keys(scores).length;
-
-  await set(ref(db, "liveScores/current"), {
-    scores,
-    playerCount,
-    lastUpdated: new Date().toISOString(),
-    tournamentStatus: data.status || "unknown",
-    round: data.roundId?.$numberInt ?? data.roundId,
-  });
-
-  console.log(`[${new Date().toLocaleTimeString()}] Updated ${playerCount} players | Tournament: ${data.status} | Round: ${data.roundId?.$numberInt ?? data.roundId}`);
 }
 
 async function main() {
   if (!ADMIN_PASSWORD) {
     console.error("ERROR: Set your Firebase password with: FIREBASE_PASS=yourpassword node score-updater.mjs");
     process.exit(1);
+  }
+
+  // Force exit after 60 seconds when running in CI/GitHub Actions
+  if (process.env.RUN_ONCE) {
+    setTimeout(() => process.exit(0), 60000);
   }
 
   const app = initializeApp(firebaseConfig);
