@@ -263,7 +263,7 @@ const PulsingDot = () => (
 );
 
 const RndBox = ({ val, label }) => {
-  if (val === null)
+  if (val == null)
     return (
       <div
         style={{
@@ -2286,7 +2286,7 @@ const MyTeamsPage = ({ entries, userEmail, liveScores }) => {
       </h2>
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {mine.map((entry) => {
-          const { withData, teamScore } = computeTeam(entry.golfers, liveScores);
+          const { withData, teamScore, eliminated } = computeTeam(entry.golfers, liveScores);
           const poolRank = entry.status === "approved" ? getPoolRank(entry.id) : null;
           return (
           <div
@@ -2311,10 +2311,20 @@ const MyTeamsPage = ({ entries, userEmail, liveScores }) => {
                 <h3 style={{ fontSize: 16, fontWeight: 700, color: PRIMARY, margin: "0 0 2px" }}>
                   {entry.name}
                 </h3>
-                {poolRank && (
+                {eliminated && (
+                  <span style={{ fontSize: 11, fontWeight: 700, color: "#ef4444", background: "#fee2e2", padding: "2px 8px", borderRadius: 6, display: "inline-block", marginBottom: 4 }}>
+                    ❌ ELIMINATED
+                  </span>
+                )}
+                {poolRank && !eliminated && (
                   <span style={{ fontSize: 12, color: "#6b7280" }}>
                     Pool Rank: <strong style={{ color: PRIMARY }}>#{poolRank}</strong>
                     {" · "}Team Score: <strong style={{ color: scoreCol(teamScore), fontFamily: "monospace" }}>{fmt(teamScore)}</strong>
+                  </span>
+                )}
+                {poolRank && eliminated && (
+                  <span style={{ fontSize: 12, color: "#6b7280" }}>
+                    Team Score: <strong style={{ color: "#ef4444", fontFamily: "monospace" }}>{fmt(teamScore)}</strong>
                   </span>
                 )}
               </div>
