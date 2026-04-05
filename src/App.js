@@ -2340,6 +2340,7 @@ export default function App() {
   const [showJoin, setShowJoin] = useState(false);
   const [liveScores, setLiveScores] = useState(DEFAULT_LIVE);
   const [isLive, setIsLive] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [tournamentInfo, setTournamentInfo] = useState(null);
   const [countdown, setCountdown] = useState("");
   const [siteAnnouncement, setSiteAnnouncement] = useState("");
@@ -2379,6 +2380,7 @@ export default function App() {
         const data = snapshot.val();
         setLiveScores(data.scores || DEFAULT_LIVE);
         setIsLive(data.playerCount > 0);
+        setLastUpdated(data.lastUpdated || null);
         console.log("Live scores updated:", data.playerCount, "players");
       } else {
         setLiveScores(DEFAULT_LIVE);
@@ -2576,11 +2578,12 @@ export default function App() {
                   }}
                 >
                   <PulsingDot />
-                  <span
-                    style={{ color: "white", fontSize: 11, fontWeight: 700 }}
-                  >
-                    LIVE
-                  </span>
+                  <span style={{ color: "white", fontSize: 11, fontWeight: 700 }}>LIVE</span>
+                  {lastUpdated && (
+                    <span style={{ color: "rgba(255,255,255,.7)", fontSize: 10 }}>
+                      · Updated {new Date(lastUpdated).toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+                    </span>
+                  )}
                 </div>
               )}
               <span style={{ color: "rgba(255,255,255,.7)", fontSize: 11 }}>
