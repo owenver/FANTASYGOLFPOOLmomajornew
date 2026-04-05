@@ -116,7 +116,7 @@ const GOLFER_LIST = [
   { name: "Gary Woodland", salary: 2000 },
   { name: "Sungjae Im", salary: 2000 },
   { name: "Wyndham Clark", salary: 2000 },
-  { name: "Matthew McCarty", salary: 2000 },
+  { name: "Matt McCarty", salary: 2000 },
   { name: "Ryan Fox", salary: 2000 },
   { name: "Harry Hall", salary: 2000 },
   { name: "John Keefer", salary: 2000 },

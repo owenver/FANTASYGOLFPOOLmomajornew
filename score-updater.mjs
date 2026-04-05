@@ -21,11 +21,17 @@ const firebaseConfig = {
 };
 
 // ── Golfer list from the app ──────────────────────────────────────────────────
-const GOLFER_LIST = ["Scottie Scheffler","Rory McIlroy","Tommy Fleetwood","Cameron Young","Matt Fitzpatrick","Xander Schauffele","Collin Morikawa","Justin Rose","Chris Gotterup","Russell Henley","Ludvig Aberg","Hideki Matsuyama","Justin Thomas","Robert MacIntyre","Ben Griffin","Akshay Bhatia","Sepp Straka","J.J. Spaun","Jacob Bridgeman","Alexander Noren","Bryson DeChambeau","Jon Rahm","Patrick Reed","Viktor Hovland","Tyrrell Hatton","Shane Lowry","Patrick Cantlay","Si Woo Kim","Min Woo Lee","Daniel Berger","Sam Burns","Marco Penge","Harris English","Maverick McNealy","Ryan Gerard","Keegan Bradley","Kurt Kitayama","Nicolai Hojgaard","Aaron Rai","Nicolas Echavarria","Brooks Koepka","Jordan Spieth","Corey Conners","Jake Knapp","Jason Day","Adam Scott","Cameron Smith","Max Homa","Gary Woodland","Sungjae Im","Wyndham Clark","Matthew McCarty","Ryan Fox","Harry Hall","John Keefer","Rasmus Neergaard-Petersen","Tom McKibbin","Brian Harman","Carlos Ortiz","Rasmus Hojgaard","Sam Stevens","Aldrich Potgieter","Andrew Novak","Casey Jarvis","Michael Kim","Hao-Tong Li","Max Greyserman","Nick Taylor","Davis Riley","Kristoffer Reitan","Sami Valimaki","Brian Campbell","Michael Brennan","Dustin Johnson","Sergio Garcia","Bubba Watson","Charl Schwartzel","Zach Johnson","Angel Cabrera","Danny Willett","Fred Couples","Mike Weir","Vijay Singh","Brandon Holtz","Ethan Fang","Fifa Laopakdee","Jackson Herrington","Jose Maria Olazabal","Mason Howell","Mateo Pulcini","Naoyuki Kataoka"];
+const GOLFER_LIST = ["Scottie Scheffler","Rory McIlroy","Tommy Fleetwood","Cameron Young","Matt Fitzpatrick","Xander Schauffele","Collin Morikawa","Justin Rose","Chris Gotterup","Russell Henley","Ludvig Aberg","Hideki Matsuyama","Justin Thomas","Robert MacIntyre","Ben Griffin","Akshay Bhatia","Sepp Straka","J.J. Spaun","Jacob Bridgeman","Alexander Noren","Bryson DeChambeau","Jon Rahm","Patrick Reed","Viktor Hovland","Tyrrell Hatton","Shane Lowry","Patrick Cantlay","Si Woo Kim","Min Woo Lee","Daniel Berger","Sam Burns","Marco Penge","Harris English","Maverick McNealy","Ryan Gerard","Keegan Bradley","Kurt Kitayama","Nicolai Hojgaard","Aaron Rai","Nicolas Echavarria","Brooks Koepka","Jordan Spieth","Corey Conners","Jake Knapp","Jason Day","Adam Scott","Cameron Smith","Max Homa","Gary Woodland","Sungjae Im","Wyndham Clark","Matt McCarty","Ryan Fox","Harry Hall","John Keefer","Rasmus Neergaard-Petersen","Tom McKibbin","Brian Harman","Carlos Ortiz","Rasmus Hojgaard","Sam Stevens","Aldrich Potgieter","Andrew Novak","Casey Jarvis","Michael Kim","Hao-Tong Li","Max Greyserman","Nick Taylor","Davis Riley","Kristoffer Reitan","Sami Valimaki","Brian Campbell","Michael Brennan","Dustin Johnson","Sergio Garcia","Bubba Watson","Charl Schwartzel","Zach Johnson","Angel Cabrera","Danny Willett","Fred Couples","Mike Weir","Vijay Singh","Brandon Holtz","Ethan Fang","Fifa Laopakdee","Jackson Herrington","Jose Maria Olazabal","Mason Howell","Mateo Pulcini","Naoyuki Kataoka"];
 
 // Normalize accents for fuzzy matching (Åberg → Aberg)
 function normalize(name) {
-  return name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  return name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "") // strip combining diacritics (Å→A, é→e, etc.)
+    .replace(/ø/gi, "o")             // ø doesn't decompose in NFD (Højgaard→Hojgaard)
+    .replace(/æ/gi, "ae")
+    .replace(/ñ/gi, "n")
+    .toLowerCase();
 }
 
 // Build a lookup map: normalized name → original app name
