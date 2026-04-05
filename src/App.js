@@ -546,15 +546,13 @@ const AdminDashboard = ({ entries, onApprove, onDeny, onDelete, onLogout, onBack
   const saveOverride = async () => {
     if (!overrideGolfer) return;
     const key = safeKey(overrideGolfer);
-    const patch = {
-      r1: overrideFields.r1 !== "" ? Number(overrideFields.r1) : 0,
-      r2: overrideFields.r2 !== "" ? Number(overrideFields.r2) : 0,
-      r3: overrideFields.r3 !== "" ? Number(overrideFields.r3) : 0,
-      r4: overrideFields.r4 !== "" ? Number(overrideFields.r4) : 0,
-      thru: overrideFields.thru,
-      cut: overrideFields.cut,
-    };
-    await update(ref(realtimeDb, `liveScores/current/scores/${key}`), patch);
+    // Build patch — only include rounds that have a value entered (leave blank = not played)
+    const patch = { thru: overrideFields.thru || "-", cut: overrideFields.cut };
+    for (const r of ["r1", "r2", "r3", "r4"]) {
+      if (overrideFields[r] !== "") patch[r] = Number(overrideFields[r]);
+    }
+    // Use set() to fully replace the player node (removes any stale rounds)
+    await set(ref(realtimeDb, `liveScores/current/scores/${key}`), patch);
     setOverrideSaved(true);
     setTimeout(() => setOverrideSaved(false), 2000);
   };
@@ -733,10 +731,10 @@ const AdminDashboard = ({ entries, onApprove, onDeny, onDelete, onLogout, onBack
       {/* Score Override */}
       <div style={{ background: "white", borderRadius: 12, padding: 20, marginBottom: 20, boxShadow: "0 1px 3px rgba(0,0,0,.08)" }}>
         <h2 style={{ fontFamily: "Georgia,serif", fontSize: 15, fontWeight: 700, color: PRIMARY, marginBottom: 4 }}>
-          ✏️ Score Override
+          ✏️ Manual Score Entry
         </h2>
         <p style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>
-          Manually correct a golfer's score if the API has a mistake.
+          Enter scores manually for any player. Leave rounds blank if not yet played. Scores are to par (e.g. -3, 0, +2).
         </p>
         <select
           value={overrideGolfer}
@@ -751,7 +749,7 @@ const AdminDashboard = ({ entries, onApprove, onDeny, onDelete, onLogout, onBack
             <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginBottom: 10 }}>
               {["r1","r2","r3","r4"].map((r) => (
                 <div key={r}>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: "#6b7280", display: "block", marginBottom: 3 }}>{r.toUpperCase()} (score to par)</label>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: "#6b7280", display: "block", marginBottom: 3 }}>{r.toUpperCase()} <span style={{fontWeight:400}}>(to par, blank=unplayed)</span></label>
                   <input
                     type="number"
                     value={overrideFields[r]}
