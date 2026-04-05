@@ -39,11 +39,11 @@ const BUDGET = 20000;
 const MIN_PLAYERS = 4;
 const ENTRIES_LOCK_TIME = new Date("2026-04-09T10:40:00Z"); // 6:40 AM ET April 9
 
-// VALERO COLORS - Blue and Yellow
-const PRIMARY = "#003DA5";
-const SECONDARY = "#00529B";
-const ACCENT = "#FFD100";
-const LIGHT_ACCENT = "#FFF8DC";
+// MASTERS COLORS - Augusta Green and Gold
+const PRIMARY = "#006747";
+const SECONDARY = "#00563B";
+const ACCENT = "#C5A028";
+const LIGHT_ACCENT = "#F5F0E0";
 
 const safeKey = (name) => name.replace(/\./g, "_");
 
@@ -54,148 +54,110 @@ const fmt = (s) => {
 const fmtMoney = (n) => "$" + n.toLocaleString();
 const scoreCol = (s) => (s < 0 ? "#16a34a" : s > 0 ? "#dc2626" : "#374151");
 
-// VALERO TEXAS OPEN FIELD - Complete 144 Players - Rounded Formula Pricing
+// MASTERS 2026 FIELD
 const GOLFER_LIST = [
-  // TIER 1 - $10,000 (Favorite +1300-1400)
-  { name: "Tommy Fleetwood", salary: 10000 },
+  // $9,000
+  { name: "Scottie Scheffler", salary: 9000 },
+  { name: "Rory McIlroy", salary: 9000 },
+  { name: "Tommy Fleetwood", salary: 9000 },
+  { name: "Cameron Young", salary: 9000 },
+  { name: "Matt Fitzpatrick", salary: 9000 },
 
-  // TIER 2 - $9,000 (Elite +1600-1800)
-  { name: "Ludvig Aberg", salary: 9000 },
-  { name: "Russell Henley", salary: 9000 },
-  { name: "Jordan Spieth", salary: 9000 },
-  { name: "Robert MacIntyre", salary: 9000 },
+  // $7,000
+  { name: "Xander Schauffele", salary: 7000 },
+  { name: "Collin Morikawa", salary: 7000 },
+  { name: "Justin Rose", salary: 7000 },
+  { name: "Chris Gotterup", salary: 7000 },
+  { name: "Russell Henley", salary: 7000 },
 
-  // TIER 3 - $7,000 (Strong +2000-2500)
-  { name: "Si Woo Kim", salary: 7000 },
-  { name: "Hideki Matsuyama", salary: 7000 },
-  { name: "Sepp Straka", salary: 7000 },
-  { name: "Maverick McNealy", salary: 7000 },
-  { name: "Michael Thorbjornsen", salary: 7000 },
-  { name: "Nicolai Højgaard", salary: 7000 },
-
-  // TIER 4 - $6,000 (Solid +2700-3500)
-  { name: "Rickie Fowler", salary: 6000 },
+  // $6,000
+  { name: "Ludvig Aberg", salary: 6000 },
+  { name: "Hideki Matsuyama", salary: 6000 },
+  { name: "Justin Thomas", salary: 6000 },
+  { name: "Robert MacIntyre", salary: 6000 },
+  { name: "Ben Griffin", salary: 6000 },
+  { name: "Akshay Bhatia", salary: 6000 },
+  { name: "Sepp Straka", salary: 6000 },
   { name: "J.J. Spaun", salary: 6000 },
-  { name: "Alex Noren", salary: 6000 },
-  { name: "Keith Mitchell", salary: 6000 },
+  { name: "Jacob Bridgeman", salary: 6000 },
+  { name: "Alexander Noren", salary: 6000 },
 
-  // TIER 5 - $4,000 (Mid-tier +4000-7000)
+  // $4,000
+  { name: "Bryson DeChambeau", salary: 4000 },
+  { name: "Jon Rahm", salary: 4000 },
+  { name: "Patrick Reed", salary: 4000 },
+  { name: "Viktor Hovland", salary: 4000 },
+  { name: "Tyrrell Hatton", salary: 4000 },
+  { name: "Shane Lowry", salary: 4000 },
+  { name: "Patrick Cantlay", salary: 4000 },
+  { name: "Si Woo Kim", salary: 4000 },
+  { name: "Min Woo Lee", salary: 4000 },
   { name: "Daniel Berger", salary: 4000 },
-  { name: "Ryo Hisatsune", salary: 4000 },
-  { name: "Sudarshan Yellamaraju", salary: 4000 },
-  { name: "Denny McCarthy", salary: 4000 },
-  { name: "Gary Woodland", salary: 4000 },
-  { name: "Johnny Keefer", salary: 4000 },
+  { name: "Sam Burns", salary: 4000 },
   { name: "Marco Penge", salary: 4000 },
-  { name: "Max Homa", salary: 4000 },
-  { name: "Billy Horschel", salary: 4000 },
-  { name: "Will Zalatoris", salary: 4000 },
-  { name: "Nick Taylor", salary: 4000 },
-  { name: "Christiaan Bezuidenhout", salary: 4000 },
-  { name: "Tony Finau", salary: 4000 },
-  { name: "Thorbjørn Olesen", salary: 4000 },
-  { name: "Brian Harman", salary: 4000 },
-  { name: "Tom Kim", salary: 4000 },
+  { name: "Harris English", salary: 4000 },
+  { name: "Maverick McNealy", salary: 4000 },
+  { name: "Ryan Gerard", salary: 4000 },
+  { name: "Keegan Bradley", salary: 4000 },
+  { name: "Kurt Kitayama", salary: 4000 },
+  { name: "Nicolai Hojgaard", salary: 4000 },
+  { name: "Aaron Rai", salary: 4000 },
+  { name: "Nicolas Echavarria", salary: 4000 },
 
-  // TIER 6 - $2,000 (Value +7000+)
-  { name: "Mac Meissner", salary: 2000 },
-  { name: "Alex Smalley", salary: 2000 },
-  { name: "Jordan Smith", salary: 2000 },
-  { name: "Ricky Castillo", salary: 2000 },
-  { name: "Austin Smotherman", salary: 2000 },
-  { name: "Davis Thompson", salary: 2000 },
-  { name: "Patrick Rodgers", salary: 2000 },
-  { name: "Max McGreevy", salary: 2000 },
-  { name: "J.T. Poston", salary: 2000 },
-  { name: "Lucas Glover", salary: 2000 },
-  { name: "Zach Bauchou", salary: 2000 },
-  { name: "Chandler Blanchet", salary: 2000 },
-  { name: "Dan Brown", salary: 2000 },
-  { name: "Rafael Campos", salary: 2000 },
-  { name: "Frankie Capan III", salary: 2000 },
-  { name: "Bud Cauley", salary: 2000 },
-  { name: "Davis Chatfield", salary: 2000 },
-  { name: "Luke Clanton", salary: 2000 },
-  { name: "Eric Cole", salary: 2000 },
-  { name: "Pierceson Coody", salary: 2000 },
-  { name: "Zecheng Dou", salary: 2000 },
-  { name: "Adrien Dumont de Chassart", salary: 2000 },
-  { name: "Nick Dunlap", salary: 2000 },
-  { name: "Austin Eckroat", salary: 2000 },
-  { name: "A.J. Ewart", salary: 2000 },
-  { name: "Patrick Fishburn", salary: 2000 },
-  { name: "Steven Fisk", salary: 2000 },
-  { name: "David Ford", salary: 2000 },
-  { name: "Brice Garnett", salary: 2000 },
-  { name: "Doug Ghim", salary: 2000 },
-  { name: "Emiliano Grillo", salary: 2000 },
-  { name: "Garrick Higgo", salary: 2000 },
-  { name: "Joe Highsmith", salary: 2000 },
-  { name: "Kensei Hirata", salary: 2000 },
-  { name: "Lee Hodges", salary: 2000 },
-  { name: "Rico Hoey", salary: 2000 },
-  { name: "Charley Hoffman", salary: 2000 },
-  { name: "Tom Hoge", salary: 2000 },
-  { name: "Beau Hossler", salary: 2000 },
-  { name: "Mark Hubbard", salary: 2000 },
-  { name: "Mackenzie Hughes", salary: 2000 },
-  { name: "Stephan Jaeger", salary: 2000 },
-  { name: "Takumi Kanaya", salary: 2000 },
-  { name: "Jeffrey Kang", salary: 2000 },
-  { name: "Michael Kim", salary: 2000 },
-  { name: "S.H. Kim", salary: 2000 },
-  { name: "Chris Kirk", salary: 2000 },
-  { name: "Patton Kizzire", salary: 2000 },
-  { name: "Matt Kuchar", salary: 2000 },
-  { name: "Christo Lamprecht", salary: 2000 },
-  { name: "Hank Lebioda", salary: 2000 },
-  { name: "K.H. Lee", salary: 2000 },
-  { name: "Haotong Li", salary: 2000 },
-  { name: "David Lipsky", salary: 2000 },
-  { name: "Justin Lower", salary: 2000 },
-  { name: "Peter Malnati", salary: 2000 },
-  { name: "Matt McCarty", salary: 2000 },
-  { name: "Taylor Moore", salary: 2000 },
-  { name: "William Mouw", salary: 2000 },
+  // $2,000
+  { name: "Brooks Koepka", salary: 2000 },
+  { name: "Jordan Spieth", salary: 2000 },
+  { name: "Corey Conners", salary: 2000 },
+  { name: "Jake Knapp", salary: 2000 },
+  { name: "Jason Day", salary: 2000 },
+  { name: "Adam Scott", salary: 2000 },
+  { name: "Cameron Smith", salary: 2000 },
+  { name: "Max Homa", salary: 2000 },
+  { name: "Gary Woodland", salary: 2000 },
+  { name: "Sungjae Im", salary: 2000 },
+  { name: "Wyndham Clark", salary: 2000 },
+  { name: "Matthew McCarty", salary: 2000 },
+  { name: "Ryan Fox", salary: 2000 },
+  { name: "Harry Hall", salary: 2000 },
+  { name: "John Keefer", salary: 2000 },
+  { name: "Rasmus Neergaard-Petersen", salary: 2000 },
+  { name: "Tom McKibbin", salary: 2000 },
+  { name: "Brian Harman", salary: 2000 },
+  { name: "Carlos Ortiz", salary: 2000 },
+  { name: "Rasmus Hojgaard", salary: 2000 },
+  { name: "Sam Stevens", salary: 2000 },
+  { name: "Aldrich Potgieter", salary: 2000 },
   { name: "Andrew Novak", salary: 2000 },
-  { name: "Pontus Nyholm", salary: 2000 },
-  { name: "John Parry", salary: 2000 },
-  { name: "Matthieu Pavon", salary: 2000 },
-  { name: "Chandler Phillips", salary: 2000 },
-  { name: "Seamus Power", salary: 2000 },
-  { name: "Andrew Putnam", salary: 2000 },
-  { name: "Chad Ramey", salary: 2000 },
+  { name: "Casey Jarvis", salary: 2000 },
+  { name: "Michael Kim", salary: 2000 },
+  { name: "Hao-Tong Li", salary: 2000 },
+  { name: "Max Greyserman", salary: 2000 },
+  { name: "Nick Taylor", salary: 2000 },
+  { name: "Davis Riley", salary: 2000 },
   { name: "Kristoffer Reitan", salary: 2000 },
-  { name: "Kevin Roy", salary: 2000 },
-  { name: "Marcelo Rozo", salary: 2000 },
-  { name: "Adrien Saddier", salary: 2000 },
-  { name: "Gordon Sargent", salary: 2000 },
-  { name: "Adam Schenk", salary: 2000 },
-  { name: "Matti Schmid", salary: 2000 },
-  { name: "Neal Shipley", salary: 2000 },
-  { name: "Webb Simpson", salary: 2000 },
-  { name: "Brandt Snedeker", salary: 2000 },
-  { name: "Jimmy Stanger", salary: 2000 },
-  { name: "Kevin Streelman", salary: 2000 },
-  { name: "Adam Svensson", salary: 2000 },
-  { name: "Jesper Svensson", salary: 2000 },
-  { name: "Brendon Todd", salary: 2000 },
-  { name: "Alejandro Tosti", salary: 2000 },
   { name: "Sami Valimaki", salary: 2000 },
-  { name: "Erik van Rooyen", salary: 2000 },
-  { name: "John VanDerLaan", salary: 2000 },
-  { name: "Jhonattan Vegas", salary: 2000 },
-  { name: "Kris Ventura", salary: 2000 },
-  { name: "Karl Vilips", salary: 2000 },
-  { name: "Camilo Villegas", salary: 2000 },
-  { name: "Danny Walker", salary: 2000 },
-  { name: "Jimmy Walker", salary: 2000 },
-  { name: "Matt Wallace", salary: 2000 },
-  { name: "Paul Waring", salary: 2000 },
-  { name: "Vince Whaley", salary: 2000 },
-  { name: "Dylan Wu", salary: 2000 },
-  { name: "Austin Wylie", salary: 2000 },
-  { name: "Kevin Yu", salary: 2000 },
+  { name: "Brian Campbell", salary: 2000 },
+  { name: "Michael Brennan", salary: 2000 },
+
+  // $1,000
+  { name: "Dustin Johnson", salary: 1000 },
+  { name: "Sergio Garcia", salary: 1000 },
+  { name: "Bubba Watson", salary: 1000 },
+  { name: "Charl Schwartzel", salary: 1000 },
+  { name: "Zach Johnson", salary: 1000 },
+  { name: "Angel Cabrera", salary: 1000 },
+  { name: "Danny Willett", salary: 1000 },
+  { name: "Fred Couples", salary: 1000 },
+  { name: "Mike Weir", salary: 1000 },
+  { name: "Vijay Singh", salary: 1000 },
+  { name: "Brandon Holtz", salary: 1000 },
+  { name: "Ethan Fang", salary: 1000 },
+  { name: "Fifa Laopakdee", salary: 1000 },
+  { name: "Jackson Herrington", salary: 1000 },
+  { name: "Jose Maria Olazabal", salary: 1000 },
+  { name: "Mason Howell", salary: 1000 },
+  { name: "Mateo Pulcini", salary: 1000 },
+  { name: "Naoyuki Kataoka", salary: 1000 },
 ];
 
 const DEFAULT_LIVE = {};
@@ -213,7 +175,7 @@ GOLFER_LIST.forEach((g) => {
 function computeTeam(golfers, liveScores) {
   const withData = golfers
     .map((g) => {
-      const d = liveScores[safeKey(g.name)] || DEFAULT_LIVE[g.name];
+      const d = liveScores[safeKey(g.name)] || DEFAULT_LIVE[g.name] || { r1: null, r2: null, r3: null, r4: null, thru: "-", cut: false };
       const total = [d.r1, d.r2, d.r3, d.r4]
         .filter((x) => x != null)
         .reduce((a, b) => a + b, 0);
@@ -386,7 +348,7 @@ const LoginPage = ({ onLogin }) => {
               marginBottom: 8,
             }}
           >
-            Valero Texas Open
+            The Masters
           </h1>
           <p style={{ color: "#6b7280", fontSize: 14 }}>
             Fantasy Golf Pool - Sign {isSignup ? "up" : "in"} to play
@@ -1751,7 +1713,7 @@ const JoinModal = ({ onClose, onSubmit }) => {
 const GolferLeaderboard = ({ liveScores }) => {
   const [showAll, setShowAll] = useState(false);
   const field = GOLFER_LIST.map((g) => {
-    const d = liveScores[safeKey(g.name)] || DEFAULT_LIVE[g.name];
+    const d = liveScores[safeKey(g.name)] || DEFAULT_LIVE[g.name] || { r1: null, r2: null, r3: null, r4: null, thru: "-", cut: false };
     const total = [d.r1, d.r2, d.r3, d.r4]
       .filter((x) => x != null)
       .reduce((a, b) => a + b, 0);
@@ -2166,12 +2128,12 @@ const HelpPage = () => (
       {
         title: "Salary Tiers",
         items: [
-          "$10,000 — Tournament favorite (top pick)",
-          "$9,000 — Elite contenders",
+          "$9,000 — Elite contenders (Scheffler, McIlroy tier)",
           "$7,000 — Strong players",
           "$6,000 — Solid mid-range picks",
           "$4,000 — Mid-tier value plays",
           "$2,000 — Longshot/value picks",
+          "$1,000 — Past champions & amateurs",
         ],
       },
       {
@@ -2597,7 +2559,7 @@ export default function App() {
                 momajors.com
               </p>
               <h1 style={{ color: "white", fontSize: 20, fontWeight: 700 }}>
-                Valero Texas Open
+                The Masters
               </h1>
               <p style={{ color: ACCENT, fontSize: 11, marginTop: 2 }}>
                 Fantasy Golf Pool
