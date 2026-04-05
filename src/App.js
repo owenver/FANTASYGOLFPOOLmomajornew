@@ -2109,7 +2109,7 @@ const HelpPage = () => (
           "Each player picks a team of golfers from the tournament field before the event begins.",
           "You have a $20,000 salary cap — your total golfer salaries cannot exceed this amount.",
           "You must select at least 4 golfers.",
-          "Only the top 4 scores from your team count each round. Your worst scores are dropped.",
+          "Your team score is the combined cumulative total (strokes to par) of your 4 best golfers at any point in the tournament. Your other golfers are dropped.",
           "The team with the lowest combined score at the end of the tournament wins.",
         ],
       },
