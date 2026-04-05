@@ -525,6 +525,20 @@ const AdminDashboard = ({ entries, onApprove, onDeny, onDelete, onLogout, onBack
     setTimeout(() => setAnnounceSaved(false), 2000);
   };
 
+  // Next update countdown (10 min cycle)
+  const [countdown, setCountdown] = useState(600);
+  useEffect(() => {
+    const start = Date.now();
+    const interval = setInterval(() => {
+      const elapsed = Math.floor((Date.now() - start) / 1000) % 600;
+      setCountdown(600 - elapsed);
+    }, 1000);
+    return () => clearInterval(interval);
+  }, []);
+  const countMins = String(Math.floor(countdown / 60)).padStart(2, "0");
+  const countSecs = String(countdown % 60).padStart(2, "0");
+  const countUrgent = countdown <= 60;
+
   // Score override
   const [overrideGolfer, setOverrideGolfer] = useState("");
   const [overrideFields, setOverrideFields] = useState({ r1: "", r2: "", r3: "", r4: "", thru: "", cut: false });
@@ -730,9 +744,15 @@ const AdminDashboard = ({ entries, onApprove, onDeny, onDelete, onLogout, onBack
 
       {/* Score Override */}
       <div style={{ background: "white", borderRadius: 12, padding: 20, marginBottom: 20, boxShadow: "0 1px 3px rgba(0,0,0,.08)" }}>
-        <h2 style={{ fontFamily: "Georgia,serif", fontSize: 15, fontWeight: 700, color: PRIMARY, marginBottom: 4 }}>
-          ✏️ Manual Score Entry
-        </h2>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+          <h2 style={{ fontFamily: "Georgia,serif", fontSize: 15, fontWeight: 700, color: PRIMARY, margin: 0 }}>
+            ✏️ Manual Score Entry
+          </h2>
+          <div style={{ background: countUrgent ? "#fef2f2" : "#f0fdf4", border: `1px solid ${countUrgent ? "#fca5a5" : "#86efac"}`, borderRadius: 8, padding: "4px 10px", textAlign: "center" }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: countUrgent ? "#dc2626" : "#16a34a", letterSpacing: 1 }}>NEXT UPDATE</div>
+            <div style={{ fontSize: 18, fontWeight: 800, fontFamily: "monospace", color: countUrgent ? "#dc2626" : "#15803d" }}>{countMins}:{countSecs}</div>
+          </div>
+        </div>
         <p style={{ fontSize: 12, color: "#6b7280", marginBottom: 12 }}>
           Enter scores manually for any player. Leave rounds blank if not yet played. Scores are to par (e.g. -3, 0, +2).
         </p>
