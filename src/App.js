@@ -720,12 +720,20 @@ const AdminDashboard = ({ entries, onApprove, onDeny, onDelete, onLogout, onBack
           placeholder="e.g. Entries close Thursday 6:40 AM ET — make sure your team is submitted!"
           style={{ width: "100%", padding: 10, borderRadius: 8, border: "1px solid #e5e7eb", fontSize: 13, resize: "vertical", minHeight: 70, boxSizing: "border-box", fontFamily: "inherit" }}
         />
-        <button
-          onClick={saveAnnouncement}
-          style={{ marginTop: 8, padding: "8px 18px", borderRadius: 8, background: announceSaved ? "#16a34a" : PRIMARY, color: "white", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13 }}
-        >
-          {announceSaved ? "✓ Saved!" : "Post Announcement"}
-        </button>
+        <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+          <button
+            onClick={saveAnnouncement}
+            style={{ padding: "8px 18px", borderRadius: 8, background: announceSaved ? "#16a34a" : PRIMARY, color: "white", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13 }}
+          >
+            {announceSaved ? "✓ Saved!" : "Post Announcement"}
+          </button>
+          <button
+            onClick={async () => { await set(ref(realtimeDb, "announcement"), null); setAnnouncement(""); }}
+            style={{ padding: "8px 18px", borderRadius: 8, background: "#f3f4f6", color: "#ef4444", border: "1px solid #fca5a5", cursor: "pointer", fontWeight: 700, fontSize: 13 }}
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
       {/* Score Override */}
