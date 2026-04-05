@@ -1990,7 +1990,7 @@ const TeamPlayerList = ({ entry }) => {
   );
 };
 
-const TeamLeaderboard = ({ entries, liveScores }) => {
+const TeamLeaderboard = ({ entries, liveScores, userEmail, entriesLocked }) => {
   const approvedEntries = entries.filter((e) => e.status === "approved");
   const computed = approvedEntries.map((e) => {
     const { withData, top4, teamScore, eliminated } = computeTeam(
@@ -2099,7 +2099,10 @@ const TeamLeaderboard = ({ entries, liveScores }) => {
                   )}
                 </div>
               </div>
-              <TeamPlayerList entry={entry} />
+              {!entriesLocked && entry.ownerEmail !== userEmail
+                ? <p style={{ fontSize: 11, color: "#9ca3af", margin: 0, fontStyle: "italic" }}>🔒 Picks hidden until tournament starts</p>
+                : <TeamPlayerList entry={entry} />
+              }
             </div>
           );
         })}
@@ -2708,7 +2711,7 @@ export default function App() {
             }}
           >
             <GolferLeaderboard liveScores={liveScores} />
-            <TeamLeaderboard entries={entries} liveScores={liveScores} />
+            <TeamLeaderboard entries={entries} liveScores={liveScores} userEmail={user.email} entriesLocked={entriesLocked} />
           </div>
         </div>
       )}
