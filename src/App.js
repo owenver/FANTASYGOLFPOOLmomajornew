@@ -37,7 +37,7 @@ const auth = getAuth(app);
 const ADMIN_EMAIL = "owenverlander@gmail.com";
 const BUDGET = 20000;
 const MIN_PLAYERS = 4;
-const ENTRIES_LOCK_TIME = new Date("2026-04-09T10:40:00Z"); // 6:40 AM ET April 9
+const ENTRIES_LOCK_TIME = new Date("2026-04-09T11:40:00Z"); // 7:40 AM ET April 9
 
 // MASTERS COLORS - Augusta Green and Gold
 const PRIMARY = "#006747";
