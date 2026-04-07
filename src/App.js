@@ -2151,7 +2151,7 @@ const HelpPage = () => (
           "Entries must be submitted before the tournament begins — no changes after tee-off.",
           "All entries must be approved by the pool admin before they are officially entered.",
           "You can enter multiple teams.",
-          "In the event of a tie in the pool, the tiebreaker score you submitted is used.",
+          "In the event of a tie, the tiebreaker is used — when submitting your team, you guess the Masters winner's final score to par (e.g. -15). Whoever's guess is closest to the actual winning score wins the tiebreaker.",
           "Scores update automatically every 10 minutes during tournament rounds.",
         ],
       },
