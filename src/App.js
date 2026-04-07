@@ -2349,6 +2349,7 @@ export default function App() {
   const [entries, setEntries] = useState([]);
   const [page, setPage] = useState("leaderboard");
   const [showJoin, setShowJoin] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
   const [liveScores, setLiveScores] = useState(DEFAULT_LIVE);
   const [isLive, setIsLive] = useState(false);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -2458,6 +2459,8 @@ export default function App() {
         status: "pending",
         createdAt: new Date().toISOString(),
       });
+      setShowJoin(false);
+      setShowPayment(true);
     } catch (error) {
       console.error("Error:", error);
       alert("Error saving team");
@@ -2720,6 +2723,29 @@ export default function App() {
       )}
       {page === "help" && <HelpPage />}
 
+      {showPayment && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.55)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+          <div style={{ background: "white", borderRadius: 16, padding: 28, maxWidth: 400, width: "100%", textAlign: "center", boxShadow: "0 20px 60px rgba(0,0,0,.3)" }}>
+            <div style={{ fontSize: 40, marginBottom: 12 }}>🎉</div>
+            <h2 style={{ fontFamily: "Georgia,serif", fontSize: 18, fontWeight: 700, color: PRIMARY, marginBottom: 8 }}>Team Submitted!</h2>
+            <p style={{ fontSize: 13, color: "#374151", marginBottom: 20, lineHeight: 1.6 }}>
+              To get your team approved into the Pool Leaderboard, send <strong>$10</strong> via cash or Venmo:
+            </p>
+            <div style={{ background: LIGHT_ACCENT, borderRadius: 12, padding: "14px 20px", marginBottom: 20 }}>
+              <p style={{ fontSize: 15, fontWeight: 800, color: PRIMARY, margin: "0 0 4px" }}>@owen-verlander</p>
+              <p style={{ fontSize: 12, color: "#6b7280", margin: "0 0 10px" }}>or</p>
+              <p style={{ fontSize: 15, fontWeight: 800, color: PRIMARY, margin: 0 }}>@MichaelBahr</p>
+            </div>
+            <p style={{ fontSize: 11, color: "#9ca3af", marginBottom: 20 }}>Your team will appear as pending until payment is confirmed.</p>
+            <button
+              onClick={() => setShowPayment(false)}
+              style={{ padding: "10px 28px", borderRadius: 999, background: PRIMARY, color: "white", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 14 }}
+            >
+              Got it!
+            </button>
+          </div>
+        </div>
+      )}
       {showJoin && (
         <JoinModal onClose={() => setShowJoin(false)} onSubmit={handleJoin} />
       )}
