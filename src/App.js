@@ -2034,16 +2034,22 @@ const TeamLeaderboard = ({ entries, liveScores, userEmail, entriesLocked }) => {
       </div>
       <div style={{ maxHeight: 600, overflowY: "auto" }}>
         {sorted.map((entry) => {
-          const rank = entry.eliminated
-            ? null
-            : active.findIndex((a) => a.id === entry.id) + 1;
+          let rank = null;
+          let dispRank = "-";
+          if (!entry.eliminated) {
+            const pos = active.findIndex((a) => a.id === entry.id) + 1;
+            const tied = active.filter((a) => a.teamScore === entry.teamScore).length;
+            const firstIdx = active.findIndex((a) => a.teamScore === entry.teamScore) + 1;
+            rank = pos;
+            dispRank = tied > 1 ? `T${firstIdx}` : String(pos);
+          }
           const isLead = rank === 1;
           return (
             <div
               key={entry.id}
               style={{
                 borderBottom: "1px solid #f3f4f6",
-                background: entry.eliminated ? "#fef2f2" : isLead ? "#fffbeb" : "white",
+                background: entry.eliminated ? "#fef2f2" : dispRank === "1" || dispRank === "T1" ? "#fffbeb" : "white",
                 padding: "12px 16px",
                 opacity: entry.eliminated ? 0.75 : 1,
               }}
@@ -2064,7 +2070,7 @@ const TeamLeaderboard = ({ entries, liveScores, userEmail, entriesLocked }) => {
                     minWidth: 30,
                   }}
                 >
-                  {rank || "-"}
+                  {dispRank}
                 </span>
                 <div style={{ flex: 1 }}>
                   <h3
