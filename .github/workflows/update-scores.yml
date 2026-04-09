@@ -2,9 +2,9 @@ name: Update Golf Scores
 
 on:
   schedule:
-    # Every 10 min during golf hours (noon–midnight UTC = 8am–8pm ET)
+    # Every 10 min during golf hours (11am–midnight UTC = 7am–8pm ET)
     # Masters 2026: Apr 9-12
-    - cron: "*/10 12-23 9-12 4 *"  # Masters Thu-Sun
+    - cron: "*/10 11-23 9-12 4 *"  # Masters Thu-Sun
   workflow_dispatch: # Allow manual trigger from GitHub
 
 jobs:
