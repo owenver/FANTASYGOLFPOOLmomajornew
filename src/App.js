@@ -80,7 +80,7 @@ const GOLFER_LIST = [
   { name: "Sepp Straka", salary: 6000 },
   { name: "J.J. Spaun", salary: 6000 },
   { name: "Jacob Bridgeman", salary: 6000 },
-  { name: "Alexander Noren", salary: 6000 },
+  { name: "Alex Noren", salary: 6000 },
 
   // $4,000
   { name: "Bryson DeChambeau", salary: 4000 },
@@ -125,12 +125,12 @@ const GOLFER_LIST = [
   { name: "Brian Harman", salary: 2000 },
   { name: "Carlos Ortiz", salary: 2000 },
   { name: "Rasmus Hojgaard", salary: 2000 },
-  { name: "Sam Stevens", salary: 2000 },
+  { name: "Samuel Stevens", salary: 2000 },
   { name: "Aldrich Potgieter", salary: 2000 },
   { name: "Andrew Novak", salary: 2000 },
   { name: "Casey Jarvis", salary: 2000 },
   { name: "Michael Kim", salary: 2000 },
-  { name: "Hao-Tong Li", salary: 2000 },
+  { name: "Haotong Li", salary: 2000 },
   { name: "Max Greyserman", salary: 2000 },
   { name: "Nick Taylor", salary: 2000 },
   { name: "Davis Riley", salary: 2000 },
