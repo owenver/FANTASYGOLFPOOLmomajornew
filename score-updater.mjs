@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, set } from "firebase/database";
+import { getDatabase, ref, set, update } from "firebase/database";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 // ── Config ────────────────────────────────────────────────────────────────────
@@ -112,13 +112,19 @@ async function fetchAndUpdate(db) {
     const scores = transformLeaderboard(data.leaderboardRows || []);
     const playerCount = Object.keys(scores).length;
 
-    await set(ref(db, "liveScores/current"), {
-      scores,
+    // Update metadata fields
+    await update(ref(db, "liveScores/current"), {
       playerCount,
       lastUpdated: new Date().toISOString(),
       tournamentStatus: data.status || "unknown",
       round: data.roundId?.$numberInt ?? data.roundId,
     });
+    // Update each player individually so manual overrides aren't wiped
+    const scoreUpdates = {};
+    for (const [key, value] of Object.entries(scores)) {
+      scoreUpdates[`scores/${key}`] = value;
+    }
+    await update(ref(db, "liveScores/current"), scoreUpdates);
 
     console.log(`[${new Date().toLocaleTimeString()}] Updated ${playerCount} players | Tournament: ${data.status} | Round: ${data.roundId?.$numberInt ?? data.roundId}`);
   } catch (err) {
